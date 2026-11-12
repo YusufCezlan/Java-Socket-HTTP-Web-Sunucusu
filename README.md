@@ -1,65 +1,34 @@
-# Java-Socket-HTTP-Web-Sunucusu
+# Java Socket Tabanlı HTTP Web Sunucusu
 
-Bu proje, herhangi bir 3. parti kütüphane veya harici çerçeve (framework) kullanılmadan, yalnızca standart Java SE API (`java.net`, `java.io`) ve Socket Programlama mimarisi kullanılarak geliştirilmiş çok iş parçacıklı (multi-threaded) basit bir HTTP web sunucusudur.
+Bu proje, herhangi bir 3. parti kütüphane veya harici web çatısı (framework) kullanılmadan, yalnızca standart Java SE (`java.net`) kütüphaneleri ve Socket programlama teknikleri kullanılarak geliştirilmiş basit bir HTTP web sunucusudur.
 
 ## Proje Bilgileri
 
 * **Geliştirici:** Zekeriya Yusuf Cezlan
-* **Öğrenci No:** 1250505031
-* **Bölüm:** Kırklareli Üniversitesi - Yazılım Mühendisliği
-* **Dinlenen Port:** `1989`
-* **Protokol:** HTTP/1.1
+* **Öğrenci Numarası:** 1250505031
+* **Çalışma Portu:** `1989`
 
-## Özellikler
+## Projenin Amacı ve Özellikleri
 
-* **Saf Java Mimarisi:** Harici bağımlılık olmadan `ServerSocket` ve `Socket` sınıfları ile TCP/IP tabanlı iletişim.
-* **Eşzamanlı İstek İşleme (Multi-threading):** Her gelen istemci bağlantısı ayrı bir `Thread` üzerinde işlenerek sunucunun kilitlenmesi önlenir.
-* **SOLID Prensipleri:** Sunucu dinleme (`Main`) ve istemci istek/yanıt yönetimi (`RequestHandler`) sorumlulukları birbirinden ayrılmıştır.
-* **Dinamik HTML/CSS Yanıtı:** Bağlanan web tarayıcısına UTF-8 karakter setiyle biçimlendirilmiş öğrenci biyografi sayfası sunulur.
+* **Saf Java Mimarisi:** Harici bir sunucu bağımlılığı olmadan doğrudan `ServerSocket` ve `Socket` sınıfları üzerinden TCP bağlantıları dinlenir ve HTTP/1.1 standartlarına uygun yanıtlar üretilir.
+* **Dinamik HTML Yanıtı:** Tarayıcı üzerinden `http://localhost:1989` adresine istek atıldığında istemciye geçerli HTTP başlıkları (`HTTP/1.1 200 OK`, `Content-Type: text/html; charset=UTF-8`) ile birlikte biçimlendirilmiş HTML sayfası döndürülür.
+* **Sayfa İçeriği:**
+  * Ana başlık (`H1`) ile geliştiricinin Adı Soyadı
+  * Alt başlık (`H2`) ile Öğrenci Numarası
+  * CSS (renk, yazı tipi ve düzen) ile biçimlendirilmiş kısa biyografi metni
+* **SOLID Uyumluluğu:** Sunucu başlatma/bağlantı kabul etme sorumluluğu ile gelen HTTP isteklerini işleyip yanıt üretme sorumluluğu ayrı sınıflara bölünerek **Tek Sorumluluk Prensibi (Single Responsibility Principle)** uygulanmıştır.
 
 ## Proje Yapısı
 
-```text
-server/
-├── src/
-│   └── main/
-│       └── java/
-│           └── org/
-│               └── example/
-│                   ├── Main.java            # 1989 portunu dinleyen ve istemcileri kabul eden ana sınıf
-│                   └── RequestHandler.java  # Gelen HTTP isteklerini işleyip HTML yanıtı döndüren sınıf
-├── pom.xml
-└── README.md
-```
+* `src/main/java/org/example/Main.java`: 1989 portunu dinleyen ve gelen bağlantıları kabul eden ana sunucu sınıfı
+* `src/main/java/RequestHandler.java`: İstemci isteklerini okuyan ve HTML yanıtını oluşturan işleyici sınıf
+* `pom.xml`: Proje yapılandırma dosyası
+* `README.md`: Proje dokümantasyonu
 
 ## Kurulum ve Çalıştırma
 
-### 1. Projeyi Klonlayın
-```bash
-git clone [https://github.com/KULLANICI_ADIN/Java-Socket-HTTP-Web-Sunucusu.git](https://github.com/KULLANICI_ADIN/Java-Socket-HTTP-Web-Sunucusu.git)
-cd Java-Socket-HTTP-Web-Sunucusu
-```
-
-### 2. Derleme ve Çalıştırma
-
-**IDE Üzerinden (IntelliJ IDEA):**
-1. Projeyi IntelliJ IDEA ile açın.
-2. `src/main/java/org/example/Main.java` dosyasını çalıştırın (**Run**).
-
-**Terminal / Komut İstemi Üzerinden:**
-```bash
-javac -d out src/main/java/org/example/*.java
-java -cp out org.example.Main
-```
-
-### 3. Tarayıcıdan Erişim
-Sunucu başlatıldıktan sonra herhangi bir web tarayıcısını açarak aşağıdaki adrese gidin:
-```text
-http://localhost:1989
-```
-
-## Teknik Mimari ve SOLID Yaklaşımı
-
-* **Single Responsibility Principle (Tek Sorumluluk):** `Main` sınıfı yalnızca soket bağlantısını dinlemekten; `RequestHandler` sınıfı ise HTTP başlıklarını okumaktan ve HTML içeriğini göndermekten sorumludur.
-* **Liskov Substitution & Interface Segregation:** `RequestHandler` sınıfı, Java'nın tek amaçlı standart `Runnable` arayüzünü uygulayarak `Thread` yapısına tam uyum sağlar.
-* **Dependency Inversion:** `RequestHandler`, soket bağımlılığını kurucu metot (`Constructor Injection`) üzerinden dışarıdan alır.
+1. Depoyu bilgisayarınıza klonlayın veya indirin:
+   `git clone [https://github.com/YusufCezlan/Java-Socket-HTTP-Web-Sunucusu.git](https://github.com/YusufCezlan/Java-Socket-HTTP-Web-Sunucusu.git)`
+2. Projeyi **IntelliJ IDEA** veya tercih ettiğiniz herhangi bir Java IDE'si ile açın.
+3. `src/main/java/org/example/Main.java` dosyasını çalıştırın.
+4. Herhangi bir web tarayıcısını açarak adres çubuğuna `http://localhost:1989` yazarak sayfayı görüntüleyin.
